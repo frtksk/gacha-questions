@@ -76,23 +76,22 @@
   /* Flash on tap */
   .tap-flash {
     position: fixed;
-    left: 0;
-    top: 0;
-    width: min(20vw, 78px);
-    height: min(20vw, 78px);
-    transform: translate(-50%, -50%);
+    left: -39px;
+    top: -39px;
+    width: 78px;
+    height: 78px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.65);
+    background: rgba(255,255,255,0.7);
     pointer-events: none;
     opacity: 0;
     z-index: 150;
   }
   .tap-flash.flash {
-    animation: flashAnim 0.35s ease-out forwards;
+    animation: flashAnim 0.4s ease-out forwards;
   }
   @keyframes flashAnim {
-    0%   { opacity: 0.8; transform: scale(0.85); }
-    100% { opacity: 0; transform: scale(1.5); }
+    0%   { opacity: 0.85; transform: scale(0.7); }
+    100% { opacity: 0;    transform: scale(2.2); }
   }
 
   .tap-hint {
@@ -364,23 +363,24 @@ function spinGacha(e) {
   if (isSpinning) return;
   isSpinning = true;
 
-  var flash = document.getElementById('tapFlash');
+  // Get tap/click coordinates
   var clientX, clientY;
   if (e && e.changedTouches && e.changedTouches.length > 0) {
     clientX = e.changedTouches[0].clientX;
     clientY = e.changedTouches[0].clientY;
-  } else if (e && e.clientX !== undefined) {
+  } else if (e) {
     clientX = e.clientX;
     clientY = e.clientY;
   }
-  if (clientX !== undefined) {
-    flash.style.left = clientX + 'px';
-    flash.style.top = clientY + 'px';
-    flash.classList.remove('flash');
-    void flash.offsetWidth;
-    flash.classList.add('flash');
-    setTimeout(function() { flash.classList.remove('flash'); }, 400);
-  }
+
+  // Show flash at tap position
+  var flash = document.getElementById('tapFlash');
+  flash.style.left = clientX + 'px';
+  flash.style.top  = clientY + 'px';
+  flash.classList.remove('flash');
+  void flash.offsetWidth;
+  flash.classList.add('flash');
+  setTimeout(function() { flash.classList.remove('flash'); }, 400);
 
   vibrate([30, 20, 30]);
 
